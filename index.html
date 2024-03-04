@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Subsidios APP</title>
+  <link rel="stylesheet" type="text/css" href="estilos.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+<script src="app.js"></script>
+</head>
+<body>
+
+  <div class="list-container">
+    <h2>Lista de subsidios existentes</h2>
+
+    <ul id="lista-subsidios"></ul>
+  </div>
+  <div class="list-container">
+    <h2>Lista de oficinas creadas</h2>
+
+    <ul id="lista-oficinas"></ul>
+  </div>
+  <div class="list-container">
+    <h2>Lista de beneficiarios</h2>
+
+    <ul id="lista-beneficiarios"></ul>
+  </div>
+  <div class="list-container">
+    <h2>Detalles subsidios solicitados</h2>
+    <ul id="lista-detalles"></ul>
+  </div>
+  <button class="boton-generar" onclick="generarYDescargarPDF()">Generar PDF</button>
+    
+  <div class="form-container">
+    <h2>Listado de subsidios por persona</h2>
+    <label for="idBeneficiario">Ingrese el ID del beneficiario:</label>
+  <input type="text" id="idBeneficiario" placeholder="ID">
+
+  <button class="boton-generar" onclick="generarPDF()">Generar PDF</button>
+  <h2>Listado de subsidios por oficina</h2>
+  <label for="idOficina">Ingrese el ID de la oficina:</label>
+<input type="text" id="idOficina" placeholder="ID">
+<br>
+
+<label for="fechaInicio">Ingrese la fecha de inicio (YYYYMMDD):</label>
+
+<input type="text" id="fechaInicio" placeholder="Fecha de inicio">
+<br>
+<label for="fechaFin">Ingrese la fecha de fin (YYYYMMDD):</label>
+<input type="text" id="fechaFin" placeholder="Fecha de fin">
+
+<button class="boton-generar" onclick="generarPDFOficina()">Generar PDF</button>
+
+    <h2>Registro de beneficiarios</h2>
+    
+    <form id="formulario">
+      <div class="form-group">
+        <label for="nombre">Nombre:</label>
+        <input type="text" class="form-control" id="nombre" placeholder="Ingresa tu nombre" required>
+      </div>
+      <div class="form-group">
+        <label for="apellido">Apellido:</label>
+        <input type="text" class="form-control" id="apellido" placeholder="Ingresa tu apellido" required>
+      </div>
+      <div class="form-group">
+        <label for="numerodedocumento">Documento:</label>
+        <input type="text" class="form-control" id="numerodedocumento" placeholder="Ingresa tu documento" required>
+      </div>
+      <div class="form-group">
+        <label for="TipodeDocumento">Tipo de documento:</label>
+        <input type="text" class="form-control" id="TipodeDocumento" placeholder="Ingresa tu apellido" required>
+      </div>
+     
+   
+      <button type="submit" class="btn btn-primary">Registrar</button>
+    </form>
+  </div>
+
+  <div class="form-container">
+    <h2>Registro de oficina</h2>
+    
+    <form id="formulario2">
+      <div class="form-group">
+        <label for="descripcion">Oficina:</label>
+        <input type="text" class="form-control" id="descripcion" placeholder="Ingresa la oficina" required>
+      </div>
+     
+     
+   
+      <button type="submit" class="btn btn-primary">Registrar</button>
+    </form>
+  </div>
+
+
+  <div class="form-container">
+    <h2>Registro de subsidio</h2>
+    
+    <form id="formulario3">
+      <div class="form-group">
+        <label for="descripcionsub">Descripcion:</label>
+        <input type="text" class="form-control" id="descripcionsub" placeholder="Descripcion subsidio" required>
+      </div>
+      <div class="form-group">
+        <label for="oficinasoli">Oficina solicitante:</label>
+        <input type="text" class="form-control" id="oficinasoli" placeholder="Ingrese ID de la Oficina Solicitante" required>
+      </div>
+      <div class="form-group">
+        <label for="fecha_de_alta">Fecha de alta:</label>
+        <input type="text" class="form-control" id="fecha_de_alta" placeholder="Ingresa fecha de alta" required>
+      </div>
+      <div class="form-group">
+        <label for="año">Año:</label>
+        <input type="text" class="form-control" id="año" placeholder="Ingresa el año" required>
+      </div>
+      <div class="form-group">
+        <label for="mes">Mes:</label>
+        <input type="text" class="form-control" id="mes" placeholder="Ingresa el mes" required>
+      </div>
+      <div class="form-group">
+        <label for="estado">Estado</label>
+        <input type="text" class="form-control" id="estado" placeholder="Ingresa estado (AC / BA)" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Registrar</button>
+    </form>
+  </div>
+
+  <div class="form-container">
+    <h2>Eliminar subsidio</h2>
+    <form id="formulario-eliminar-subsidio">
+      <div class="form-group">
+        <label for="subsidioId">ID del Subsidio a eliminar:</label>
+        <input type="text" class="form-control" id="subsidioId" placeholder="Ingrese el ID del subsidio a eliminar" required>
+      </div>
+      <button type="submit" class="btn btn-danger">Eliminar</button>
+    </form>
+  </div>
+
+  <div class="form-container">
+    <h2>Crear un detalle de subsidio</h2>
+    
+    <form id="formulario4">
+      <div class="form-group">
+        <label for="IDSUB">ID Subsidio:</label>
+        <input type="text" class="form-control" id="IDSUB" placeholder="Ingresa ID del subsidio" required>
+      </div>
+      <div class="form-group">
+        <label for="IDBENEF">ID Beneficiario</label>
+        <input type="text" class="form-control" id="IDBENEF" placeholder="Ingresa ID del beneficiario" required>
+      </div>
+      <div class="form-group">
+        <label for="importesub">Importe:</label>
+        <input type="text" class="form-control" id="importesub" placeholder="Ingresa el importe" required>
+      </div>
+      <div class="form-group">
+        <label for="estadosub">Estado:</label>
+        <input type="text" class="form-control" id="estadosub" placeholder="Ingresa el estado (Activo - Baja)" required>
+      </div>
+      <button type="submit" class="btn btn-primary">Registrar</button>
+    </form>
+  </div>
+
+  <div class="form-container">
+    <h2>Eliminar detalle subsidio</h2>
+    <form id="formulario-eliminar-detalle">
+      <div class="form-group">
+        <label for="detalleID">ID del Detalle subsidio a eliminar:</label>
+        <input type="text" class="form-control" id="detalleID" placeholder="Ingrese el ID del detalle subsidio a eliminar" required>
+      </div>
+      <button type="submit" class="btn btn-danger">Eliminar</button>
+    </form>
+  </div>
+
+  <!-- Bootstrap JS - Popper.js  -->
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+  
+  <script>
+    // REGISTRO DE BENEFICIARIO
+    document.getElementById('formulario').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const nombre = document.getElementById('nombre').value;
+      const apellido = document.getElementById('apellido').value;
+      const numerodedocumento = document.getElementById('numerodedocumento').value;
+      const TipodeDocumento = document.getElementById('TipodeDocumento').value;
+      try {
+        const response = await fetch('http://localhost:3000/api/registro', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ nombre, apellido, numerodedocumento, TipodeDocumento})
+        });
+        const data = await response.json();
+        alert(data.mensaje);
+      } catch (error) {
+        console.error('Error al enviar datos al backend:', error);
+        alert('Error al enviar datos al backend');
+      }
+    });
+
+    
+    // REGISTRO DE OFICINA
+    document.getElementById('formulario2').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const descripcion = document.getElementById('descripcion').value;
+      try {
+        const response = await fetch('http://localhost:3000/api/oficina', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ descripcion})
+        });
+        const data = await response.json();
+        alert(data.mensaje);
+      } catch (error) {
+        console.error('Error al enviar datos al backend:', error);
+        alert('Error al enviar datos al backend');
+      }
+    });
+
+// REGISTRO DE SUBSIDIO
+document.getElementById('formulario3').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const descripcionsub = document.getElementById('descripcionsub').value;
+      const oficinasolicitante = document.getElementById('oficinasoli').value;
+      const fecha_de_alta = document.getElementById('fecha_de_alta').value;
+      const año = document.getElementById('año').value;
+      const mes = document.getElementById('mes').value;
+      const estado = document.getElementById('estado').value;
+      try {
+        const response = await fetch('http://localhost:3000/api/nuevosubsidio', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ descripcionsub, oficinasolicitante, fecha_de_alta, año, mes, estado})
+        });
+        const data = await response.json();
+        alert(data.mensaje);
+      } catch (error) {
+        console.error('Error al enviar datos al backend:', error);
+        alert('Error al enviar datos al backend');
+      }
+    });
+    
+    // ELIMINACION DE SUBSIDIO EXISTENTE
+    document.getElementById('formulario-eliminar-subsidio').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const subsidioId = document.getElementById('subsidioId').value;
+      try {
+        const response = await fetch(`http://localhost:3000/api/eliminar-subsidio/${subsidioId}`, {
+          method: 'DELETE'
+        });
+        const data = await response.json();
+        alert(data.mensaje);
+      } catch (error) {
+        console.error('Error al eliminar subsidio:', error);
+        alert('Error al eliminar subsidio');
+      }
+    });
+
+    // ELIMINACION DE DETALLE SUBSIDIO
+    document.getElementById('formulario-eliminar-detalle').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const detalleID = document.getElementById('detalleID').value;
+      try {
+        const response = await fetch(`http://localhost:3000/api/eliminar-detalle/${detalleID}`, {
+          method: 'DELETE'
+        });
+        const data = await response.json();
+        alert(data.mensaje);
+      } catch (error) {
+        console.error('Error al eliminar detalle subsidio:', error);
+        alert('Error al eliminar detalle subsidio');
+      }
+    });
+
+    // REGISTRO DE DETALLE SUBSIDIO
+document.getElementById('formulario4').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const IDSUB = document.getElementById('IDSUB').value;
+      const IDBENEF = document.getElementById('IDBENEF').value;
+      const importesub = document.getElementById('importesub').value;
+      const estadosub = document.getElementById('estadosub').value;
+      try {
+        const response = await fetch('http://localhost:3000/api/detallesubsidio', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ IDSUB, IDBENEF, importesub, estadosub})
+        });
+        const data = await response.json();
+        alert(data.mensaje);
+      } catch (error) {
+        console.error('Error al enviar datos al backend:', error);
+        alert('Error al enviar datos al backend');
+      }
+    });
+
+// funcion para cargar y mostrar la lista de subsidios
+async function cargarListaSubsidios() {
+      try {
+        const response = await fetch('http://localhost:3000/api/subsidios');
+        const subsidios = await response.json();
+        document.getElementById('lista-subsidios').innerHTML = '';
+        subsidios.forEach((subsidio) => {
+          const listItem = document.createElement('li');
+          listItem.textContent = `ID: ${subsidio.IdSubsidio}, Descripción: ${subsidio.Descripcion}`;
+          document.getElementById('lista-subsidios').appendChild(listItem);
+        });
+      } catch (error) {
+        console.error('Error al cargar la lista de subsidios:', error);
+        alert('Error al cargar la lista de subsidios');
+      }
+    }
+
+// funcion para cargar y mostrar la lista de oficinas
+async function cargarListaOficinas() {
+      try {
+        const response = await fetch('http://localhost:3000/api/oficinas');
+        const oficinas = await response.json();
+        document.getElementById('lista-oficinas').innerHTML = '';
+        oficinas.forEach((oficina) => {
+          const listItem = document.createElement('li');
+          listItem.textContent = `ID: ${oficina.IdOficina}, Descripción: ${oficina.Descripcion}`;
+          document.getElementById('lista-oficinas').appendChild(listItem);
+        });
+      } catch (error) {
+        console.error('Error al cargar la lista de oficinas:', error);
+        alert('Error al cargar la lista de oficinas');
+      }
+    }
+
+    // funcion para cargar y mostrar la lista de beneficiarios
+async function cargarListaBeneficiarios() {
+      try {
+        const response = await fetch('http://localhost:3000/api/beneficiarios');
+        const beneficiarios = await response.json();
+        document.getElementById('lista-beneficiarios').innerHTML = '';
+        beneficiarios.forEach((beneficiarios) => {
+          const listItem = document.createElement('li');
+          listItem.textContent = `ID: ${beneficiarios.IdBeneficiario}, Nombre: ${beneficiarios.Nombre}, Apellido: ${beneficiarios.Apellido}, DNI: ${beneficiarios.NumerodeDocumento}`;
+          document.getElementById('lista-beneficiarios').appendChild(listItem);
+        });
+      } catch (error) {
+        console.error('Error al cargar la lista de beneficiarios:', error);
+        alert('Error al cargar la lista de beneficiarios');
+      }
+    }
+
+    // funcion para cargar y mostrar la lista de detalles subsidios solicitados
+async function cargarListaDetallesSubsidios() {
+      try {
+        const response = await fetch('http://localhost:3000/api/detallesubsidiossolicitados');
+        const detalles = await response.json();
+        document.getElementById('lista-detalles').innerHTML = '';
+        detalles.forEach((detalles) => {
+          const listItem = document.createElement('li');
+          listItem.textContent = `ID Detalle: ${detalles.IdSubsidioDetalle}, ID Subsidio: ${detalles.IdSubsidio}, ID Beneficiario: ${detalles.IdBeneficiario}, Importe: ${detalles.Importe}, Estado: ${detalles.Estado}`;
+          document.getElementById('lista-detalles').appendChild(listItem);
+        });
+      } catch (error) {
+        console.error('Error al cargar la lista de detalles subsidios:', error);
+        alert('Error al cargar la lista de detalles subsidios');
+      }
+    }
+
+    // funcion para generar PDF
+    async function generarYDescargarPDF() {
+      try {
+        const response = await fetch('http://localhost:3000/generar-pdf');
+        if (response.ok) {
+          const blob = await response.blob();
+          const link = document.createElement('a');
+          link.href = window.URL.createObjectURL(blob);
+          link.download = 'DetalleSubsidiosyBeneficiarios.pdf';
+          link.click();
+        } else {
+          console.error('Error al generar el PDF. Código de estado:', response.status);
+        }
+      } catch (error) {
+        console.error('Error al generar el PDF:', error);
+      }
+    }
+    // generar pdf para beneficiarios
+    function generarPDF() {
+      const idBeneficiario = document.getElementById('idBeneficiario').value;
+
+      if (!idBeneficiario) {
+        alert('Por favor, ingrese un IdBeneficiario válido.');
+        return;
+      }
+
+      fetch(`http://localhost:3000/generar-pdf-beneficiario/${idBeneficiario}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('Error al generar el PDF.');
+          }
+          return response.blob();
+        })
+        .then(blob => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `subsidiosdetalle-beneficiario-${idBeneficiario}.pdf`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        })
+        .catch(error => {
+          console.error(error);
+          alert('Error al generar el PDF.');
+        });
+    }
+    // generar pdf para oficinas 
+    function generarPDFOficina() {
+  const idOficina = document.getElementById('idOficina').value;
+  const fechaInicio = document.getElementById('fechaInicio').value;
+  const fechaFin = document.getElementById('fechaFin').value;
+
+  if (!idOficina || !fechaInicio || !fechaFin) {
+    alert('Por favor, ingrese valores válidos para IdOficina, fecha de inicio y fecha de fin.');
+    return;
+  }
+
+  fetch(`http://localhost:3000/generar-pdf-oficina/${idOficina}/${fechaInicio}/${fechaFin}`)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error('Error al generar el PDF.');
+      }
+      return response.blob();
+    })
+    .then(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `subsidiosdetalle-oficina-${idOficina}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    })
+    .catch(error => {
+      console.error(error);
+      alert('Error al generar el PDF.');
+    });
+}
+
+    // llamar a la funcion para cargar las listas al cargar la página
+    window.onload = () => {
+      cargarListaSubsidios();
+      cargarListaOficinas();
+      cargarListaBeneficiarios();
+      cargarListaDetallesSubsidios();
+    };
+  </script>
+</body>
+</html>
