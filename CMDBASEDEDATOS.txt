@@ -1,0 +1,30 @@
+CREATE TABLE beneficiarios (
+    IdBeneficiario INT AUTO_INCREMENT PRIMARY KEY,
+    TipoDocumento VARCHAR(20),
+    NumeroDocumento VARCHAR(20),
+    Apellido VARCHAR(50),
+    Nombre VARCHAR(50)
+);
+CREATE TABLE oficinas (
+    IdOficina INT AUTO_INCREMENT PRIMARY KEY,
+    Descripcion VARCHAR(50)
+);
+CREATE TABLE subsidios (
+    IdSubsidio INT AUTO_INCREMENT PRIMARY KEY,
+    Descripcion VARCHAR(50),
+    IdOficinaSolicitante INT,
+    FechaAlta DATE,
+    Anio INT,
+    Mes INT,
+    Estado VARCHAR(2) CHECK (Estado IN ('AC', 'BA')),
+    FOREIGN KEY (IdOficinaSolicitante) REFERENCES oficinas(IdOficina)
+);
+CREATE TABLE subsidiosdetalle (
+    IdSubsidioDetalle INT AUTO_INCREMENT PRIMARY KEY,
+    IdSubsidio INT,
+    IdBeneficiario INT,
+    Importe DECIMAL(10, 2),
+    Estado VARCHAR(20),
+    FOREIGN KEY (IdSubsidio) REFERENCES subsidios(IdSubsidio),
+    FOREIGN KEY (IdBeneficiario) REFERENCES beneficiarios(IdBeneficiario)
+);
