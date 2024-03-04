@@ -5,6 +5,7 @@ Las librerías utilizadas son:
 2. Cors
 3. Pdfkit
 4. Mysql2
+   
 Cree un frontend básico para el registro de beneficiarios, oficinas, subsidios (tipo 
 de subsidio) y, detalle de subsidios . También coloque la opción para eliminar 
 subsidios y detalles.
