@@ -1,3 +1,8 @@
+importar base de datos de la carpeta del repositorio
+instalar nodeJS
+ejecutar cmd en la direccion de la carpeta: npm init -y
+ejecutar en la terminal de visual studio para instalar las dependencias necesarias: npm install express mysql2 cors pdfkit
+
 Desarrollé la aplicación para el control de los subsidios con NodeJS (Express)
 y MYSQL como base de datos relacional. 
 Las librerías utilizadas son: 
